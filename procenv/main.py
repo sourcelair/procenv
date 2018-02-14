@@ -22,7 +22,6 @@ def port_is_used():
     return False
 
 
-
 async def honcho():
     # Run an echo subprocess
     process = await asyncio.create_subprocess_exec(
