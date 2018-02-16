@@ -58,11 +58,12 @@ class ProcfileCheck(BaseCheck):
     """
     def preboot(self):
         if not utils.detect_procfile():
-            utils.log(
+            message = (
                 f'Cannot find a Procfile to run your application.',
                 'PF40'
             )
-            return False
+            return False, message
+
         return True
 
 

@@ -1,58 +1,16 @@
-import asyncio
-import sys
-
-from . import checks
-from . import utils
+from . import lifecycle
 
 
-async def application():
-    utils.log(
-        '👋 Procenv booted. Preparing to run your application.',
-        'PE00'
-    )
-    procfile = utils.detect_procfile()
-
-    utils.log(
-        f'Running application with Procfile "{procfile}".',
-        'PE10'
-    )
-    args = ['honcho', '-f', procfile, 'start']
-    process = await asyncio.create_subprocess_exec(
-        *args,
-        stdout=sys.stdout,
-        stderr=sys.stderr,
-    )
-    code = await process.wait()
+CHECKS_TO_RUN = [
+    'procenv.checks.ProcfileCheck',
+    'procenv.checks.PortBindCheck',
+    'procenv.checks.DatabaseURLCheck',
+    'procenv.checks.RedisURLCheck',
+]
 
 
 def main():
-    procfile_check = checks.ProcfileCheck()
-    port_bind_check = checks.PortBindCheck()
-    database_url_check = checks.DatabaseURLCheck()
-    redis_url_check = checks.RedisURLCheck()
-    _checks = [
-        procfile_check, port_bind_check, database_url_check, redis_url_check,
-    ]
-    at_least_one_check_has_failed = False
-
-    for check in _checks:
-        if not check.preboot():
-            at_least_one_check_has_failed = True
-            utils.log(
-                f'Check {check.__class__.__name__}.preboot() failed.',
-                code='PE40'
-            )
-
-    if at_least_one_check_has_failed:
-        sys.exit(40)
-
-    loop = asyncio.get_event_loop()
-    boot_task = loop.create_task(application())
-
-    for check in _checks:
-        check_port_task = loop.create_task(check.main())
-
-    loop.run_until_complete(boot_task)
+    lifecycle.start(checks=CHECKS_TO_RUN)
 
 if __name__ == '__main__':
     main()
