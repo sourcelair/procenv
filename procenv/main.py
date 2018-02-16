@@ -16,15 +16,9 @@ async def honcho():
 
 
 def main():
-    try:
-        loop = asyncio.get_event_loop()
-        loop.create_task(checks.PortBindCheck().main())
-        loop.run_until_complete(honcho())
-    except KeyboardInterrupt:
-        utils.log('Received keyboard interuppt. Stopping.')
-        loop.stop()
-
-    loop.close()
+    loop = asyncio.get_event_loop()
+    check_port_task = loop.create_task(checks.PortBindCheck().main())
+    loop.run_until_complete(honcho())
 
 if __name__ == '__main__':
     main()

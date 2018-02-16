@@ -23,7 +23,18 @@ class BaseCheck:
     def check(self):
         raise NotImplemented('You have to implement the `check` method.')
 
+    @property
+    def should_run(self):
+        """
+        All checks should run by default. Subclasses can re-implement this
+        property in order to decide whether they should run or not.
+        """
+        return True
+
     async def main(self):
+        if not self.should_run:
+            return
+
         self.setup()
 
         try:
@@ -39,7 +50,7 @@ class PortBindCheck(BaseCheck):
     """
 
     HTTP_HANDLER = http.server.SimpleHTTPRequestHandler
-    PORT = int(os.getenv('PORT'))
+    PORT = int(os.getenv('PORT', 0))
     TCP_SERVER_ARGS = (('', PORT), HTTP_HANDLER)
 
     def _port_is_used(self):
@@ -53,6 +64,14 @@ class PortBindCheck(BaseCheck):
                 return False
 
         return False
+
+    @property
+    def should_run(self):
+        """
+        The check should only run if the `PORT` environment variable is
+        available.
+        """
+        return bool(self.PORT)
 
     def setup(self):
         message = (
