@@ -28,15 +28,23 @@ async def application():
 def main():
     procfile_check = checks.ProcfileCheck()
     port_bind_check = checks.PortBindCheck()
-    _checks = [procfile_check, port_bind_check]
+    database_url_check = checks.DatabaseURLCheck()
+    redis_url_check = checks.RedisURLCheck()
+    _checks = [
+        procfile_check, port_bind_check, database_url_check, redis_url_check,
+    ]
+    at_least_one_check_has_failed = False
 
     for check in _checks:
         if not check.preboot():
+            at_least_one_check_has_failed = True
             utils.log(
                 f'Check {check.__class__.__name__}.preboot() failed.',
                 code='PE40'
             )
-            sys.exit(40)
+
+    if at_least_one_check_has_failed:
+        sys.exit(40)
 
     loop = asyncio.get_event_loop()
     boot_task = loop.create_task(application())

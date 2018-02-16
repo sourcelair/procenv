@@ -66,6 +66,38 @@ class ProcfileCheck(BaseCheck):
         return True
 
 
+class DatabaseURLCheck(BaseCheck):
+    """
+    """
+    def preboot(self):
+        DATABASE_URL = os.getenv('DATABASE_URL')
+
+        if DATABASE_URL:
+            utils.log(
+                'Your application is expected to connect to its database at '
+                f'"{DATABASE_URL}".',
+                'DB10'
+            )
+
+        return True
+
+
+class RedisURLCheck(BaseCheck):
+    """
+    """
+    def preboot(self):
+        REDIS_URL = os.getenv('REDIS_URL')
+
+        if REDIS_URL:
+            utils.log(
+                'Your application is expected to connect to Redis '
+                f'"{REDIS_URL}".',
+                'RD10'
+            )
+
+        return True
+
+
 class PortBindCheck(BaseCheck):
     """
     """
