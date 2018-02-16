@@ -5,23 +5,16 @@ from . import checks
 from . import utils
 
 
-async def boot():
+async def application():
     utils.log(
         '👋 Procenv booted. Preparing to run your application.',
         'PE00'
     )
     procfile = utils.detect_procfile()
 
-    if not procfile:
-        utils.log(
-            f'Cannot find a Procfile to run your application.',
-            'PE40'
-        )
-        return
-
     utils.log(
-        f'Using "{procfile}" to run your application.',
-        'PE02'
+        f'Running application with Procfile "{procfile}".',
+        'PE10'
     )
     args = ['honcho', '-f', procfile, 'start']
     process = await asyncio.create_subprocess_exec(
@@ -33,9 +26,24 @@ async def boot():
 
 
 def main():
+    procfile_check = checks.ProcfileCheck()
+    port_bind_check = checks.PortBindCheck()
+    _checks = [procfile_check, port_bind_check]
+
+    for check in _checks:
+        if not check.preboot():
+            utils.log(
+                f'Check {check.__class__.__name__}.preboot() failed.',
+                code='PE40'
+            )
+            sys.exit(40)
+
     loop = asyncio.get_event_loop()
-    boot_task = loop.create_task(boot())
-    check_port_task = loop.create_task(checks.PortBindCheck().main())
+    boot_task = loop.create_task(application())
+
+    for check in _checks:
+        check_port_task = loop.create_task(check.main())
+
     loop.run_until_complete(boot_task)
 
 if __name__ == '__main__':

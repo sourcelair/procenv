@@ -1,3 +1,4 @@
+import functools
 import os
 import sys
 
@@ -15,6 +16,7 @@ def log(message, code=None):
     sys.stderr.write(full_message)
 
 
+@functools.lru_cache()
 def detect_procfile():
     """
     Find the appropriate Procfile to run the application.
@@ -30,7 +32,7 @@ def detect_procfile():
                 f'Cannot find the Procfile "{env_var_procfile}" defined in '
                 'the PROCFILE environment variable. Falling back to '
                 f'"{procfile}".',
-                'PE01'
+                'PF40'
             )
 
     if not os.path.exists(procfile):

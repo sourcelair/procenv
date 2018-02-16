@@ -17,11 +17,19 @@ class BaseCheck:
     """
     interval = 5
 
+    def preboot(self):
+        """
+        The preboot check runs before Procenv attempts to start the
+        application. If it does not return a True-ish value, Procenv will exit
+        without attempting to run the application.
+        """
+        return True
+
     def setup(self):
-        pass
+        return True
 
     def check(self):
-        raise NotImplemented('You have to implement the `check` method.')
+        return True
 
     @property
     def should_run(self):
@@ -43,6 +51,19 @@ class BaseCheck:
                 self.check()
         except StopCheckException:
             return
+
+
+class ProcfileCheck(BaseCheck):
+    """
+    """
+    def preboot(self):
+        if not utils.detect_procfile():
+            utils.log(
+                f'Cannot find a Procfile to run your application.',
+                'PF40'
+            )
+            return False
+        return True
 
 
 class PortBindCheck(BaseCheck):
@@ -73,16 +94,16 @@ class PortBindCheck(BaseCheck):
         """
         return bool(self.PORT)
 
-    def setup(self):
+    def preboot(self):
         message = (
             f'Application is expected to bind to port {self.PORT}.'
         )
-        utils.log(message, 'PE14')
+        utils.log(message, 'PB10')
+        return True
 
     def check(self):
         if self._port_is_used():
             raise StopCheckException()
 
         message = f'Application is not binding to port {self.PORT}.'
-        utils.log(message, 'PE44')
-
+        utils.log(message, 'PB40')
