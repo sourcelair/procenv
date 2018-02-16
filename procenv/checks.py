@@ -75,14 +75,14 @@ class PortBindCheck(BaseCheck):
 
     def setup(self):
         message = (
-            f'👋 Hey. We expect your application to bind to port {self.PORT}.'
+            f'Application is expected to bind to port {self.PORT}.'
         )
-        utils.log(message, 'PE10')
+        utils.log(message, 'PE14')
 
     def check(self):
         if self._port_is_used():
             raise StopCheckException()
 
         message = f'Application is not binding to port {self.PORT}.'
-        utils.log(message, 'PE40')
+        utils.log(message, 'PE44')
 
