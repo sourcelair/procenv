@@ -10,12 +10,6 @@ def get_checks(check_import_strings):
     return checks
 
 
-def get_loop():
-    loop = asyncio.get_event_loop()
-
-    return loop
-
-
 async def application():
     utils.log(
         '👋 Procenv booted. Preparing to run your application.',
@@ -76,7 +70,7 @@ def setup_checks(loop, checks):
 def start(checks):
     _checks = get_checks(checks)
     preboot(_checks)
-    loop = get_loop()
+    loop = asyncio.get_event_loop()
     application_task = loop.create_task(application())
     setup_checks(loop, _checks)
     loop.run_until_complete(application_task)
