@@ -16,8 +16,7 @@ class BaseCheck:
     def preboot(self):
         """
         The preboot check runs before Procenv attempts to start the
-        application. If it does not return a True-ish value, Procenv will exit
-        without attempting to run the application.
+        application.
         """
         return True
 
@@ -39,8 +38,6 @@ class BaseCheck:
 
 
 class ProcfileCheck(BaseCheck):
-    """
-    """
     def preboot(self):
         if not utils.detect_procfile():
             message = (
@@ -53,8 +50,6 @@ class ProcfileCheck(BaseCheck):
 
 
 class DatabaseURLCheck(BaseCheck):
-    """
-    """
     def preboot(self):
         DATABASE_URL = os.getenv('DATABASE_URL')
 
@@ -69,8 +64,6 @@ class DatabaseURLCheck(BaseCheck):
 
 
 class RedisURLCheck(BaseCheck):
-    """
-    """
     def preboot(self):
         REDIS_URL = os.getenv('REDIS_URL')
 
@@ -85,9 +78,6 @@ class RedisURLCheck(BaseCheck):
 
 
 class PortBindCheck(BaseCheck):
-    """
-    """
-
     HTTP_HANDLER = http.server.SimpleHTTPRequestHandler
     PORT = int(os.getenv('PORT', 0))
     TCP_SERVER_ARGS = (('', PORT), HTTP_HANDLER)
