@@ -1,6 +1,7 @@
 from unittest import mock
 import os
 
+from . import checks
 from . import utils
 
 def test_detect_procfile():
@@ -58,8 +59,6 @@ def test_import_string():
     Make sure that `import_string` imports the appropriate module or class,
     when invoked.
     """
-    from . import checks
-
     # Assert that importing a module via a dotted path, works
     assert utils.import_string('procenv.checks') == checks
 

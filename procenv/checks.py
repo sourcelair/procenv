@@ -146,11 +146,11 @@ class PortBindCheck(BaseCheck):
         utils.log(message, 'PB40')
 
 
-def load_check(check_dotted_path):
+def load_check(dotted_path):
     """
     Return a Check instance, given a dotted path.
     """
-    check_class = utils.import_string(check_dotted_path)
+    check_class = utils.import_string(dotted_path)
 
     if not issubclass(check_class, BaseCheck):
         msg = (
