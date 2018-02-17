@@ -39,7 +39,7 @@ def import_string(dotted_path):
         module_path, class_name = dotted_path.rsplit('.', 1)
     except ValueError as err:
         msg = f'{dotted_path} doesn\'t look like a module path'
-        raise ImportError() from err
+        raise ImportError(msg) from err
 
     module = import_module(module_path)
 
