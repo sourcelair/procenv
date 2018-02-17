@@ -1,6 +1,7 @@
 from unittest import mock
 
 from . import checks
+from . import exceptions
 
 
 def test_load_check():
@@ -35,7 +36,7 @@ def test_load_check():
 
         try:
             check = checks.load_check(check_dotted_path)
-        except checks.InvalidCheckException as e:
+        except exceptions.InvalidCheckException as e:
             expected_exception_message = (
                 f'Class "{ScumCheck}" should be a subclass of '
                 f'"{checks.BaseCheck}".'

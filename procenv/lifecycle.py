@@ -8,8 +8,8 @@ async def application():
     procfile = utils.detect_procfile()
 
     utils.log(
+        'PE10',
         f'Running application with Procfile "{procfile}".',
-        'PE10'
     )
     args = ['honcho', '-f', procfile, 'start']
     process = await asyncio.create_subprocess_exec(
@@ -45,10 +45,10 @@ def preboot(checks):
                 message = reason
                 code = 'PE40'
 
-            utils.log(message, code)
+            utils.log(code, message)
 
     if at_least_one_check_has_failed:
-        utils.log('Exiting because at least one preboot check failed', 'PE11')
+        utils.log('PE11', 'Exiting because at least one preboot check failed')
         sys.exit(40)
 
 

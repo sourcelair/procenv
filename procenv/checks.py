@@ -4,15 +4,8 @@ import http.server
 import os
 import socketserver
 
+from . import exceptions
 from . import utils
-
-
-class StopCheckException(Exception):
-    pass
-
-
-class InvalidCheckException(Exception):
-    pass
 
 
 class BaseCheck:
@@ -28,9 +21,6 @@ class BaseCheck:
         """
         return True
 
-    def setup(self):
-        return True
-
     def check(self):
         return True
 
@@ -43,17 +33,9 @@ class BaseCheck:
         return True
 
     async def main(self):
-        if not self.should_run:
-            return
-
-        self.setup()
-
-        try:
-            while True:
-                await asyncio.sleep(self.interval)
-                self.check()
-        except StopCheckException:
-            return
+        while self.should_run:
+            await asyncio.sleep(self.interval)
+            self.check()
 
 
 class ProcfileCheck(BaseCheck):
@@ -62,8 +44,8 @@ class ProcfileCheck(BaseCheck):
     def preboot(self):
         if not utils.detect_procfile():
             message = (
+                'PF40',
                 f'Cannot find a Procfile to run your application.',
-                'PF40'
             )
             return False, message
 
@@ -78,9 +60,9 @@ class DatabaseURLCheck(BaseCheck):
 
         if DATABASE_URL:
             utils.log(
+                'DB10',
                 'Your application is expected to connect to its database at '
                 f'"{DATABASE_URL}".',
-                'DB10'
             )
 
         return True
@@ -94,9 +76,9 @@ class RedisURLCheck(BaseCheck):
 
         if REDIS_URL:
             utils.log(
+                'RD10',
                 'Your application is expected to connect to Redis '
                 f'"{REDIS_URL}".',
-                'RD10'
             )
 
         return True
@@ -125,24 +107,25 @@ class PortBindCheck(BaseCheck):
     @property
     def should_run(self):
         """
-        The check should only run if the `PORT` environment variable is
-        available.
+        The check should only run as long as  the `PORT` environment variable
+        is available and the port defined in it is free to bind.
         """
-        return bool(self.PORT)
+        if not bool(self.PORT):
+            return False
+
+        return not self._port_is_used()
 
     def preboot(self):
         message = (
             f'Application is expected to bind to port {self.PORT}.'
         )
-        utils.log(message, 'PB10')
+        utils.log('PB10', message)
         return True
 
     def check(self):
-        if self._port_is_used():
-            raise StopCheckException()
-
-        message = f'Application is not binding to port {self.PORT}.'
-        utils.log(message, 'PB40')
+        if not self._port_is_used():
+            message = f'Application is not binding to port {self.PORT}.'
+            utils.log('PB40', message)
 
 
 def load_check(dotted_path):
@@ -155,7 +138,7 @@ def load_check(dotted_path):
         msg = (
             f'Class "{check_class}" should be a subclass of "{BaseCheck}".'
         )
-        raise InvalidCheckException(msg)
+        raise exceptions.InvalidCheckException(msg)
 
     check = check_class()
 
