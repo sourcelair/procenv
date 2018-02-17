@@ -6,6 +6,7 @@
 
 pytest = "*"
 isort = "*"
+"flake8" = "*"
 
 
 [packages]

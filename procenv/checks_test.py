@@ -13,7 +13,7 @@ def test_load_check():
     # class, if it is a subclass of BaseCheck.
     with mock.patch(
         'procenv.utils.import_string',
-        return_value = checks.PortBindCheck,
+        return_value=checks.PortBindCheck,
     ) as import_string_stub:
         check_dotted_path = 'procenv.checks.PortBindCheck'
         check = checks.load_check(check_dotted_path)
@@ -29,7 +29,7 @@ def test_load_check():
 
     with mock.patch(
         'procenv.utils.import_string',
-        return_value = ScumCheck,
+        return_value=ScumCheck,
     ) as import_string_stub:
         check_dotted_path = 'procenv.checks.PortBindCheck'
 

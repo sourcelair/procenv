@@ -17,7 +17,7 @@ async def application():
         stdout=sys.stdout,
         stderr=sys.stderr,
     )
-    code = await process.wait()
+    await process.wait()
 
 
 def preboot(checks):

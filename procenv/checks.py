@@ -3,7 +3,6 @@ import errno
 import http.server
 import os
 import socketserver
-import sys
 
 from . import utils
 
@@ -113,7 +112,7 @@ class PortBindCheck(BaseCheck):
 
     def _port_is_used(self):
         try:
-            with socketserver.TCPServer(*self.TCP_SERVER_ARGS) as httpd:
+            with socketserver.TCPServer(*self.TCP_SERVER_ARGS):
                 return False
         except OSError as e:
             if e.errno == errno.EADDRINUSE:

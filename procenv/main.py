@@ -1,7 +1,6 @@
 import click
 
 from . import lifecycle
-from . import utils
 from .checks import load_check
 
 

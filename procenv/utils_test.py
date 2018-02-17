@@ -4,6 +4,7 @@ import os
 from . import checks
 from . import utils
 
+
 def test_detect_procfile():
     """
     This test asserts that `detect_procfile` returns the appropriate
@@ -18,7 +19,7 @@ def test_detect_procfile():
     # `None` is returned.
     os.chdir(os.path.join(cwd, 'procenv/fixtures/procfile_scum'))
     utils.detect_procfile.cache_clear()
-    assert utils.detect_procfile() == None
+    assert utils.detect_procfile() is None
 
     # Assert that calling `detect_procfile` in a directory with the `PROCFILE`
     # environment variable set and the file not existing, and no file named
@@ -26,7 +27,7 @@ def test_detect_procfile():
     os.chdir(os.path.join(cwd, 'procenv/fixtures/procfile_scum'))
     utils.detect_procfile.cache_clear()
     with mock.patch('os.getenv', return_value='Procfile.dev'):
-        assert utils.detect_procfile() == None
+        assert utils.detect_procfile() is None
 
     # Assert that calling `detect_procfile` in a directory with a file named
     # `Procfile` in it and without the `PROCFILE` environment variable set,
@@ -95,4 +96,3 @@ def test_log_message():
         stderr_mock.write.assert_called_once_with(
             '[Procenv Message] (PE99) Hey mark\n',
         )
-
