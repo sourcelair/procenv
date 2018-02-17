@@ -5,6 +5,31 @@ import sys
 
 
 @functools.lru_cache()
+def detect_procfile():
+    """
+    Find the appropriate Procfile to run the application.
+    """
+    procfile = 'Procfile'
+    env_var_procfile = os.getenv('PROCFILE')
+
+    if env_var_procfile:
+        if os.path.exists(env_var_procfile):
+            procfile = env_var_procfile
+        else:
+            log(
+                f'Cannot find the Procfile "{env_var_procfile}" defined in '
+                'the PROCFILE environment variable. Falling back to '
+                f'"{procfile}".',
+                'PF40'
+            )
+
+    if not os.path.exists(procfile):
+        return None
+
+    return procfile
+
+
+@functools.lru_cache()
 def import_string(dotted_path):
     """
     Import a dotted module path and return the attribute/class designated by
@@ -28,7 +53,7 @@ def import_string(dotted_path):
         raise ImportError(msg) from err
 
 
-def log(message, code=None):
+def log(code, message):
     """
     Log a Procenv message to stderr, with an optional message code.
     """
@@ -37,28 +62,3 @@ def log(message, code=None):
     prefix = f'{message_prefix}{code_prefix}'
     full_message = f'{prefix} {message}\n'
     sys.stderr.write(full_message)
-
-
-@functools.lru_cache()
-def detect_procfile():
-    """
-    Find the appropriate Procfile to run the application.
-    """
-    procfile = 'Procfile'
-    env_var_procfile = os.getenv('PROCFILE')
-
-    if env_var_procfile:
-        if os.path.exists(env_var_procfile):
-            procfile = env_var_procfile
-        else:
-            log(
-                f'Cannot find the Procfile "{env_var_procfile}" defined in '
-                'the PROCFILE environment variable. Falling back to '
-                f'"{procfile}".',
-                'PF40'
-            )
-
-    if not os.path.exists(procfile):
-        return None
-
-    return procfile

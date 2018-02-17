@@ -5,10 +5,6 @@ from . import utils
 
 
 async def application():
-    utils.log(
-        '👋 Procenv booted. Preparing to run your application.',
-        'PE00'
-    )
     procfile = utils.detect_procfile()
 
     utils.log(
@@ -62,6 +58,8 @@ def setup_checks(loop, checks):
 
 
 def start(checks):
+    utils.log('PE00', '👋 Welcome to Procenv.')
+    utils.log('PE01', 'Running pre-boot checks for your application.')
     preboot(checks)
     loop = asyncio.get_event_loop()
     application_task = loop.create_task(application())

@@ -12,6 +12,10 @@ class StopCheckException(Exception):
     pass
 
 
+class InvalidCheckException(Exception):
+    pass
+
+
 class BaseCheck:
     """
     """
@@ -140,3 +144,20 @@ class PortBindCheck(BaseCheck):
 
         message = f'Application is not binding to port {self.PORT}.'
         utils.log(message, 'PB40')
+
+
+def load_check(check_dotted_path):
+    """
+    Return a Check instance, given a dotted path.
+    """
+    check_class = utils.import_string(check_dotted_path)
+
+    if not issubclass(check_class, BaseCheck):
+        msg = (
+            f'Class "{check_class}" should be a subclass of "{BaseCheck}".'
+        )
+        raise InvalidCheckException(msg)
+
+    check = check_class()
+
+    return check

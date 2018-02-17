@@ -5,18 +5,25 @@ from . import utils
 
 
 def test_log_message():
+    """
+    This test makes sure that `log` writes Procenv Messages to STDERR in the
+    appropriate format. Logging is important in Procenv, we do not want to
+    ruin it.
+    """
     with mock.patch('sys.stderr') as stderr_mock:
-        utils.log('hey')
-        stderr_mock.write.assert_called_once_with('[Procenv Message] hey\n')
-
-    with mock.patch('sys.stderr') as stderr_mock:
-        utils.log('ho', 'T0')
+        utils.log('PE99', 'Hey mark')
         stderr_mock.write.assert_called_once_with(
-            '[Procenv Message] (T0) ho\n',
+            '[Procenv Message] (PE99) Hey mark\n',
         )
 
 
 def test_detect_procfile():
+    """
+    This test asserts that `detect_procfile` returns the appropriate
+    `Procfile` (if it does exist), by taking into account the `PROCFILE`
+    environment variable. If no Procfile exists, then `None` should be
+    returned.
+    """
     cwd = os.getcwd()
 
     # Assert that calling `detect_procfile` in a directory without a file
