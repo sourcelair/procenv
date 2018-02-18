@@ -4,6 +4,72 @@ from . import checks
 from . import exceptions
 
 
+def test_procfile_preboot_check():
+    check = checks.ProcfileCheck()
+
+    # Assert that when a Procfile is found, then `True` is being returned.
+    with mock.patch(
+        'procenv.utils.detect_procfile',
+        return_value='Procfile.test',
+    ) as detect_procfile_stub:
+        assert check.preboot() == True
+        detect_procfile_stub.assert_called_once_with()
+
+    # Assert that when a Procfile is not found, then `False`, along with an
+    # error message are being returned.
+    with mock.patch('procenv.utils.detect_procfile', return_value=None):
+        error_message = (
+            'PF40',
+            f'Cannot find a Procfile to run your application.',
+        )
+        assert check.preboot() == (False, error_message)
+
+
+def test_database_url_preboot_check():
+    check = checks.DatabaseURLCheck()
+
+    # Assert that when the DATABASE_URL environment variable is available,
+    # then the preboot check will log the appropriate informative message.
+    with mock.patch('os.getenv', return_value='ledatabaseurl'):
+        with mock.patch('procenv.utils.log') as log_stub:
+            assert check.preboot() == True
+            log_stub.assert_called_once_with(
+                'DB10',
+                'Your application is expected to connect to its database at '
+                '"ledatabaseurl".',
+            )
+
+    # Assert that when the DATABASE_URL environment variable is not available,
+    # then the preboot check will log nothing.
+    with mock.patch('os.getenv', return_value=None):
+        with mock.patch('procenv.utils.log') as log_stub:
+            assert check.preboot() == True
+            assert log_stub.called == False
+
+
+def test_redis_url_preboot_check():
+    check = checks.RedisURLCheck()
+
+    # Assert that when the REDIS_URL environment variable is available,
+    # then the preboot check will log the appropriate informative message.
+    with mock.patch('os.getenv', return_value='leredis'):
+        with mock.patch('procenv.utils.log') as log_stub:
+            assert check.preboot() == True
+            log_stub.assert_called_once_with(
+                'RD10',
+                'Your application is expected to connect to Redis at '
+                '"leredis".',
+            )
+
+    # Assert that when the REDIS_URL environment variable is not available,
+    # then the preboot check will log nothing.
+    with mock.patch('os.getenv', return_value=None):
+        with mock.patch('procenv.utils.log') as log_stub:
+            assert check.preboot() == True
+            assert log_stub.called == False
+
+
+
 def test_load_check():
     """
     Make sure that `load_check` returns an instance of the appropriate check,

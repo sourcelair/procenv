@@ -61,7 +61,7 @@ class RedisURLCheck(BaseCheck):
         if REDIS_URL:
             utils.log(
                 'RD10',
-                'Your application is expected to connect to Redis '
+                'Your application is expected to connect to Redis at '
                 f'"{REDIS_URL}".',
             )
 
