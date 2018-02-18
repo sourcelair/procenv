@@ -69,19 +69,33 @@ class RedisURLCheck(BaseCheck):
 
 
 class PortBindCheck(BaseCheck):
-    HTTP_HANDLER = http.server.SimpleHTTPRequestHandler
-    PORT = int(os.getenv('PORT', 0))
-    TCP_SERVER_ARGS = (('', PORT), HTTP_HANDLER)
+    """
+    The Port Bind Check monitors if the port requested is available for
+    binding.
+    """
 
-    def _port_is_used(self):
+    def __init__(self, port=None):
+        self.port = port or int(os.getenv('PORT', 0))
+
+    def get_tcp_server_for_port(self):
+        """
+        Create a TCP server binding to the port of the check. This is used to
+        find out the availability of this port.
+        """
+        server = socketserver.TCPServer(
+            ('', self.port), http.server.SimpleHTTPRequestHandler,
+        )
+
+        return server
+
+    def port_is_being_used(self):
         try:
-            with socketserver.TCPServer(*self.TCP_SERVER_ARGS):
+            with self.get_tcp_server_for_port():
                 return False
         except OSError as e:
             if e.errno == errno.EADDRINUSE:
                 return True
-            else:
-                return False
+            raise e
 
         return False
 
@@ -90,21 +104,21 @@ class PortBindCheck(BaseCheck):
         The check should only run as long as  the `PORT` environment variable
         is available and the port defined in it is free to bind.
         """
-        if not bool(self.PORT):
+        if not bool(self.port):
             return False
 
-        return not self._port_is_used()
+        return not self.port_is_being_used()
 
     def preboot(self):
         message = (
-            f'Application is expected to bind to port {self.PORT}.'
+            f'Application is expected to bind to port "{self.port}".'
         )
         utils.log('PB10', message)
         return True
 
     def main(self):
-        if not self._port_is_used():
-            message = f'Application is not binding to port {self.PORT}.'
+        if not self.port_is_being_used():
+            message = f'Application has not bound to port "{self.port}".'
             utils.log('PB40', message)
 
 

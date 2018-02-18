@@ -1,4 +1,7 @@
 from unittest import mock
+import errno
+import http.server
+import unittest
 
 from . import checks
 from . import exceptions
@@ -12,7 +15,7 @@ def test_procfile_preboot_check():
         'procenv.utils.detect_procfile',
         return_value='Procfile.test',
     ) as detect_procfile_stub:
-        assert check.preboot() == True
+        assert check.preboot() is True
         detect_procfile_stub.assert_called_once_with()
 
     # Assert that when a Procfile is not found, then `False`, along with an
@@ -32,7 +35,7 @@ def test_database_url_preboot_check():
     # then the preboot check will log the appropriate informative message.
     with mock.patch('os.getenv', return_value='ledatabaseurl'):
         with mock.patch('procenv.utils.log') as log_stub:
-            assert check.preboot() == True
+            assert check.preboot() is True
             log_stub.assert_called_once_with(
                 'DB10',
                 'Your application is expected to connect to its database at '
@@ -43,8 +46,8 @@ def test_database_url_preboot_check():
     # then the preboot check will log nothing.
     with mock.patch('os.getenv', return_value=None):
         with mock.patch('procenv.utils.log') as log_stub:
-            assert check.preboot() == True
-            assert log_stub.called == False
+            assert check.preboot() is True
+            assert log_stub.called is False
 
 
 def test_redis_url_preboot_check():
@@ -54,7 +57,7 @@ def test_redis_url_preboot_check():
     # then the preboot check will log the appropriate informative message.
     with mock.patch('os.getenv', return_value='leredis'):
         with mock.patch('procenv.utils.log') as log_stub:
-            assert check.preboot() == True
+            assert check.preboot() is True
             log_stub.assert_called_once_with(
                 'RD10',
                 'Your application is expected to connect to Redis at '
@@ -65,10 +68,146 @@ def test_redis_url_preboot_check():
     # then the preboot check will log nothing.
     with mock.patch('os.getenv', return_value=None):
         with mock.patch('procenv.utils.log') as log_stub:
-            assert check.preboot() == True
-            assert log_stub.called == False
+            assert check.preboot() is True
+            assert log_stub.called is False
 
 
+class PortBindCheckTest(unittest.TestCase):
+    def test_init(self):
+        """
+        Ensure that the PortBindCheck constructor sets the appropriate value
+        to the port attribute of its instances.
+        """
+        with mock.patch('os.getenv', return_value='4000'):
+            check_with_no_port_provided = checks.PortBindCheck()
+            assert check_with_no_port_provided.port == 4000
+
+            check_with_port_provided = checks.PortBindCheck(port=5000)
+            assert check_with_port_provided.port == 5000
+
+    def test_get_tcp_server_for_port(self):
+        """
+        Ensure that the `get_tcp_server_for_port`, makes the appropriate call
+        to `socketserver.TCPServer` and returns the return value.
+        """
+        port = 8000
+        check = checks.PortBindCheck(port=port)
+        tcp_server_instance_mock = mock.MagicMock()
+
+        with mock.patch(
+            'socketserver.TCPServer',
+            return_value=tcp_server_instance_mock,
+        ) as tcp_server_mock:
+            assert check.get_tcp_server_for_port() == tcp_server_instance_mock
+            tcp_server_mock.assert_called_once_with(
+                ('', port), http.server.SimpleHTTPRequestHandler,
+            )
+
+    def test_port_is_being_used(self):
+        """
+        Ensure that the `port_is_being_used` method returns `False` if the
+        port attribute of the check is available to bind.
+        """
+        port = 8000
+        check = checks.PortBindCheck(port=port)
+
+        # Integration test: Make sure that if no process has bound to the
+        # above port, then `port_is_being_used` returns False.
+        assert check.port_is_being_used() is False
+
+        # Integration test: Make sure that if a process has bound to the
+        # above port, then `port_is_being_used` returns True.
+        with check.get_tcp_server_for_port():
+            assert check.port_is_being_used() is True
+
+        # Ensure that `port_is_being_used` makes the appropriate call to
+        # `get_tcp_server_for_port` and that if an `OSError` exception with
+        # errno EADDRINUSE gets raised with the appropriate errno, then it is
+        # being handled gracefully.
+        with mock.patch(
+            'procenv.checks.PortBindCheck.get_tcp_server_for_port',
+            side_effect=OSError(errno.EADDRINUSE, 'Address already in use'),
+        ) as get_tcp_server_for_port_mock:
+            assert check.port_is_being_used() is True
+            get_tcp_server_for_port_mock.assert_called_once()
+
+        # Ensure that other exceptions get reraised.
+        weird_exception = OSError(errno.EINTR, 'Interrupted system call')
+
+        try:
+            with mock.patch(
+                'procenv.checks.PortBindCheck.get_tcp_server_for_port',
+                side_effect=weird_exception,
+            ) as get_tcp_server_for_port_mock:
+                check.port_is_being_used()
+        except Exception as e:
+            assert e == weird_exception
+
+    def test_should_main_check_run(self):
+        """
+        Ensure that the `should_main_check_run` method returns False, if no
+        `port` is defined, or else it returns the boolean negative of
+        `port_is_being_used`.
+        """
+        check = checks.PortBindCheck()
+        check.port = None
+
+        assert check.should_main_check_run() is False
+
+        check.port = 11235
+
+        with mock.patch(
+            'procenv.checks.PortBindCheck.port_is_being_used',
+            return_value=True,
+        ):
+            assert check.should_main_check_run() is False
+
+        with mock.patch(
+            'procenv.checks.PortBindCheck.port_is_being_used',
+            return_value=False,
+        ):
+            assert check.should_main_check_run() is True
+
+    def test_preboot(self):
+        """
+        Make sure that the `preboot` check always logs an informative message
+        about the port that the application is expected to bind to.
+        """
+        check = checks.PortBindCheck(12345)
+
+        with mock.patch('procenv.utils.log') as log_mock:
+            check.preboot()
+
+        log_mock.assert_called_once_with(
+            'PB10',
+            'Application is expected to bind to port "12345".',
+        )
+
+    def test_main(self):
+        """
+        Make sure that the `main` check always logs an informative message
+        about the port that the application is expected to bind to.
+        """
+        check = checks.PortBindCheck(31415)
+
+        with mock.patch('procenv.utils.log') as log_mock:
+            with mock.patch(
+                'procenv.checks.PortBindCheck.port_is_being_used',
+                return_value=False,
+            ):
+                check.main()
+                log_mock.assert_called_once_with(
+                    'PB40',
+                    'Application has not bound to port "31415".',
+                )
+
+        with mock.patch('procenv.utils.log') as log_mock:
+            with mock.patch(
+                'procenv.checks.PortBindCheck.port_is_being_used',
+                return_value=True,
+            ):
+                check.main()
+                assert log_mock.called is False
 
 def test_load_check():
     """
