@@ -17,10 +17,10 @@ def detect_procfile():
             procfile = env_var_procfile
         else:
             log(
+                'PF10',
                 f'Cannot find the Procfile "{env_var_procfile}" defined in '
                 'the PROCFILE environment variable. Falling back to '
-                f'"{procfile}".',
-                'PF40'
+                f'"{procfile}"',
             )
 
     if not os.path.exists(procfile):

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "83e1843f3326886f890c6a0b08e24356db9973eec9b80d34dff31d1edac0be5e"
+            "sha256": "f296637d7419aec6f4d90f087e5d2d6d6ab2b857797bd7ca452e778d0a7c16c7"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -99,12 +99,26 @@
             ],
             "version": "==3.4.0"
         },
+        "pytest-tap": {
+            "hashes": [
+                "sha256:06ff3ca882b69814f20e36533157394372479c91c21233964dab52c071faf8d3",
+                "sha256:ea621f3ab77c12dc662ad6daeeb0152cfab522e2ef968d90500cf4c0a59dc965"
+            ],
+            "version": "==2.2"
+        },
         "six": {
             "hashes": [
                 "sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb",
                 "sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
             ],
             "version": "==1.11.0"
+        },
+        "tap.py": {
+            "hashes": [
+                "sha256:af320cef616d27922e0d3db3d729edecc93fdcb17c2fdc26b3e3d3dafe4d72c7",
+                "sha256:34e067d41988ce6d015c71d67f0b3025917f9a37dbc9b47aba5717a64a72b0f2"
+            ],
+            "version": "==2.2"
         }
     }
 }

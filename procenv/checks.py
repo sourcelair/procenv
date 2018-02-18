@@ -20,7 +20,7 @@ class BaseCheck:
         if not hasattr(self, 'should_main_check_run'):
             msg = (
                 f'Check "{self}" should implement the "should_main_check_run"'
-                ' method, in order to run its "main" check.'
+                ' method, in order to run its "main" check'
             )
             raise exceptions.InvalidCheckException(msg)
         while self.should_main_check_run():
@@ -33,7 +33,7 @@ class ProcfileCheck(BaseCheck):
         if not utils.detect_procfile():
             message = (
                 'PF40',
-                f'Cannot find a Procfile to run your application.',
+                f'Cannot find a Procfile to run your application',
             )
             return False, message
 
@@ -48,7 +48,7 @@ class DatabaseURLCheck(BaseCheck):
             utils.log(
                 'DB10',
                 'Your application is expected to connect to its database at '
-                f'"{DATABASE_URL}".',
+                f'"{DATABASE_URL}"',
             )
 
         return True
@@ -62,7 +62,7 @@ class RedisURLCheck(BaseCheck):
             utils.log(
                 'RD10',
                 'Your application is expected to connect to Redis at '
-                f'"{REDIS_URL}".',
+                f'"{REDIS_URL}"',
             )
 
         return True
@@ -111,14 +111,14 @@ class PortBindCheck(BaseCheck):
 
     def preboot(self):
         message = (
-            f'Application is expected to bind to port "{self.port}".'
+            f'Application is expected to bind to port "{self.port}"'
         )
         utils.log('PB10', message)
         return True
 
     def main(self):
         if not self.port_is_being_used():
-            message = f'Application has not bound to port "{self.port}".'
+            message = f'Application has not bound to port "{self.port}"'
             utils.log('PB40', message)
 
 
@@ -130,7 +130,7 @@ def load_check(dotted_path):
 
     if not issubclass(check_class, BaseCheck):
         msg = (
-            f'Class "{check_class}" should be a subclass of "{BaseCheck}".'
+            f'Class "{check_class}" should be a subclass of "{BaseCheck}"'
         )
         raise exceptions.InvalidCheckException(msg)
 

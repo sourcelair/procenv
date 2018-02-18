@@ -1,6 +1,8 @@
 import click
 
 from . import lifecycle
+from . import utils
+from .applications import ProcfileApplication
 from .checks import load_check
 
 
@@ -19,14 +21,21 @@ DEFAULT_CHECKS = [
     default=DEFAULT_CHECKS,
     multiple=True,
     show_default=True,
-    help='Checks to use when running the Procfile-based application.'
+    help='Checks to use when running the Procfile-based application'
 )
 def run(check):
     """
     Procenv lets you run, monitor and manage Procfile-based applications.
     """
+    utils.log('PE00', '👋 Welcome to Procenv')
     checks = [load_check(path) for path in check]
-    lifecycle.start(checks=checks)
+    app = ProcfileApplication(
+        procfile=utils.detect_procfile(),
+        checks=checks,
+    )
+    app.run_preboot_checks()
+    app.setup_main_checks()
+    app.run_and_wait_for_application()
 
 
 if __name__ == '__main__':

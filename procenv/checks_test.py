@@ -23,7 +23,7 @@ def test_procfile_preboot_check():
     with mock.patch('procenv.utils.detect_procfile', return_value=None):
         error_message = (
             'PF40',
-            f'Cannot find a Procfile to run your application.',
+            f'Cannot find a Procfile to run your application',
         )
         assert check.preboot() == (False, error_message)
 
@@ -39,7 +39,7 @@ def test_database_url_preboot_check():
             log_stub.assert_called_once_with(
                 'DB10',
                 'Your application is expected to connect to its database at '
-                '"ledatabaseurl".',
+                '"ledatabaseurl"',
             )
 
     # Assert that when the DATABASE_URL environment variable is not available,
@@ -61,7 +61,7 @@ def test_redis_url_preboot_check():
             log_stub.assert_called_once_with(
                 'RD10',
                 'Your application is expected to connect to Redis at '
-                '"leredis".',
+                '"leredis"',
             )
 
     # Assert that when the REDIS_URL environment variable is not available,
@@ -180,7 +180,7 @@ class PortBindCheckTest(unittest.TestCase):
 
         log_mock.assert_called_once_with(
             'PB10',
-            'Application is expected to bind to port "12345".',
+            'Application is expected to bind to port "12345"',
         )
 
     def test_main(self):
@@ -198,7 +198,7 @@ class PortBindCheckTest(unittest.TestCase):
                 check.main()
                 log_mock.assert_called_once_with(
                     'PB40',
-                    'Application has not bound to port "31415".',
+                    'Application has not bound to port "31415"',
                 )
 
         with mock.patch('procenv.utils.log') as log_mock:
@@ -208,6 +208,7 @@ class PortBindCheckTest(unittest.TestCase):
             ):
                 check.main()
                 assert log_mock.called is False
+
 
 def test_load_check():
     """
@@ -244,6 +245,6 @@ def test_load_check():
         except exceptions.InvalidCheckException as e:
             expected_exception_message = (
                 f'Class "{ScumCheck}" should be a subclass of '
-                f'"{checks.BaseCheck}".'
+                f'"{checks.BaseCheck}"'
             )
             assert str(e) == expected_exception_message
