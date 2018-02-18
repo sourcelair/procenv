@@ -19,10 +19,12 @@ class BaseCheck:
     async def main_loop(self):
         if not hasattr(self, 'should_main_check_run'):
             msg = (
-                f'Check "{self}" should implement the "should_main_check_run"'
-                ' method, in order to run its "main" check'
+                f'Check "{self}" should implement the '
+                '"should_main_check_run" method, in order to run its "main" '
+                'check'
             )
-            raise exceptions.InvalidCheckException(msg)
+            raise NotImplementedError(msg)
+
         while self.should_main_check_run():
             await asyncio.sleep(self.interval)
             self.main()

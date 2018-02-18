@@ -1,10 +1,81 @@
 from unittest import mock
+import asyncio
 import errno
 import http.server
 import unittest
 
 from . import checks
 from . import exceptions
+
+
+class BaseCheckTest(unittest.TestCase):
+    def setUp(self):
+        self.loop = asyncio.get_event_loop()
+
+    def test_main_loop(self):
+        """
+        Ensure that running the `main_loop` on a legit subclass of BaseCheck,
+        then the `main` method is being called, until `should_main_check_run`
+        returns False
+        """
+        # The `sync_asyncio_sleep` function will help us capture the call to
+        # the `asyncio.sleep` coroutine function.
+        sync_asyncio_sleep_mock = mock.MagicMock()
+
+        async def asyncio_sleep_mock(*args, **kwargs):
+            # Proxy the call to `sync_mock_process_wait`, to capture it.
+            sync_asyncio_sleep_mock(*args, **kwargs)
+            return True
+
+        class LegitCheck(checks.BaseCheck):
+            interval = 100
+            main = mock.MagicMock()
+            _times_run = 0
+
+            def should_main_check_run(self):
+                """
+                The `main` should run two times in total.
+                """
+                self._times_run += 1
+
+                if self._times_run > 2:
+                    return False
+
+                return True
+
+        legit_check = LegitCheck()
+
+        with mock.patch('asyncio.sleep', new=asyncio_sleep_mock):
+            self.loop.run_until_complete(legit_check.main_loop())
+
+        expected_asyncio_sleep_call_args_list = [
+            mock.call(LegitCheck.interval), mock.call(LegitCheck.interval),
+        ]
+        assert sync_asyncio_sleep_mock.call_args_list == expected_asyncio_sleep_call_args_list  # noqa
+
+        expected_main_call_args_list = [mock.call(), mock.call()]
+        assert legit_check.main.call_args_list == expected_main_call_args_list
+
+
+    def test_main_loop_no_should_main_check_run(self):
+        """
+        Ensure that when a subclass of `BaseCheck` does not implement the
+        `should_main_check_run` method, the appropriate exception gets raised.
+        """
+        class ScumCheck(checks.BaseCheck):
+            # No implementation of `should_main_check_run`
+            pass
+
+        scum_check = ScumCheck()
+        try:
+            self.loop.run_until_complete(scum_check.main_loop())
+        except NotImplementedError as e:
+            expected_message = (
+                f'Check "{scum_check}" should implement the '
+                '"should_main_check_run" method, in order to run its "main" '
+                'check'
+            )
+            assert str(e) == expected_message
 
 
 def test_procfile_preboot_check():
