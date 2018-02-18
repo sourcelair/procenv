@@ -1,6 +1,5 @@
 import click
 
-from . import lifecycle
 from . import utils
 from .applications import ProcfileApplication
 from .checks import load_check

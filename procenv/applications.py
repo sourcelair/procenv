@@ -5,6 +5,11 @@ from . import utils
 
 
 class ProcfileApplication:
+    """
+    The `ProcfileApplication` class helps run, monitor and manage a
+    Procfile-based application in an asyncio event loop.
+    """
+
     def __init__(self, procfile, checks, loop=None):
         self.procfile = procfile
         self.checks = checks
@@ -60,7 +65,7 @@ class ProcfileApplication:
             utils.log(
                 'PE11', 'Exiting because at least one preboot check failed',
             )
-            sys.exit(40)
+            sys.exit(1)
 
     def setup_main_checks(self):
         for check in self.main_checks:
