@@ -10,31 +10,22 @@ from . import utils
 
 class BaseCheck:
     """
+    Base class for implementing checks. To run a check in the `preboot` stage,
+    then implement the `preboot` method. To run a check in the `main` stage,
+    then implement the `main` and the `should_main_check_run` method.
     """
     interval = 5
 
-    def preboot(self):
-        """
-        The preboot check runs before Procenv attempts to start the
-        application.
-        """
-        return True
-
-    def check(self):
-        return True
-
-    @property
-    def should_run(self):
-        """
-        All checks should run by default. Subclasses can re-implement this
-        property in order to decide whether they should run or not.
-        """
-        return True
-
-    async def main(self):
-        while self.should_run:
+    async def main_loop(self):
+        if not hasattr(self, 'should_main_check_run'):
+            msg = (
+                f'Check "{self}" should implement the "should_main_check_run"'
+                ' method, in order to run its "main" check.'
+            )
+            raise exceptions.InvalidCheckException(msg)
+        while self.should_main_check_run():
             await asyncio.sleep(self.interval)
-            self.check()
+            self.main()
 
 
 class ProcfileCheck(BaseCheck):
@@ -94,8 +85,7 @@ class PortBindCheck(BaseCheck):
 
         return False
 
-    @property
-    def should_run(self):
+    def should_main_check_run(self):
         """
         The check should only run as long as  the `PORT` environment variable
         is available and the port defined in it is free to bind.
@@ -112,7 +102,7 @@ class PortBindCheck(BaseCheck):
         utils.log('PB10', message)
         return True
 
-    def check(self):
+    def main(self):
         if not self._port_is_used():
             message = f'Application is not binding to port {self.PORT}.'
             utils.log('PB40', message)

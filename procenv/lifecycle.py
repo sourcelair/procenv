@@ -20,10 +20,11 @@ async def application():
     await process.wait()
 
 
-def preboot(checks):
+def run_preboot_checks(checks):
     at_least_one_check_has_failed = False
+    preboot_checks = [check for check in checks if hasattr(check, 'preboot')]
 
-    for check in checks:
+    for check in preboot_checks:
         preboot_result = check.preboot()
 
         if (type(preboot_result) == tuple):
@@ -52,16 +53,18 @@ def preboot(checks):
         sys.exit(40)
 
 
-def setup_checks(loop, checks):
-    for check in checks:
-        loop.create_task(check.main())
+def setup_main_checks(loop, checks):
+    main_checks = [check for check in checks if hasattr(check, 'main')]
+
+    for check in main_checks:
+        loop.create_task(check.main_loop())
 
 
 def start(checks):
     utils.log('PE00', '👋 Welcome to Procenv.')
     utils.log('PE01', 'Running pre-boot checks for your application.')
-    preboot(checks)
+    run_preboot_checks(checks)
     loop = asyncio.get_event_loop()
     application_task = loop.create_task(application())
-    setup_checks(loop, checks)
+    setup_main_checks(loop, checks)
     loop.run_until_complete(application_task)

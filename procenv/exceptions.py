@@ -1,2 +1,6 @@
-class InvalidCheckException(Exception):
+class CheckException(Exception):
+    pass
+
+
+class InvalidCheckException(CheckException):
     pass
