@@ -22,7 +22,7 @@ DEFAULT_CHECKS = [
     show_default=True,
     help='Checks to use when running the Procfile-based application'
 )
-def run(check):
+def main(check):
     """
     Procenv lets you run, monitor and manage Procfile-based applications.
     """
@@ -38,4 +38,4 @@ def run(check):
 
 
 if __name__ == '__main__':
-    run()
+    main()
