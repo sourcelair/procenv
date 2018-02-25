@@ -5,6 +5,6 @@ Welcome to the documentation of Procenv.
 - Command Line Interface
 - Configuration
 - Procfiles
-- Application Lifecycle
+- [Lifecycle](lifecycle.md)
 - [Messages](messages.md)
 - Checks

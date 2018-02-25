@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="922px" height="938px" viewBox="0 0 922 938" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>procenv-lifecycle</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Open-Source-/-Procenv" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="procenv-lifecycle">
+            <text id="Application-exits" font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                <tspan x="176" y="830">Application exits</tspan>
+            </text>
+            <g id="Application-exit" transform="translate(24.000000, 864.000000)">
+                <rect id="Rectangle" stroke="#494F57" x="0.5" y="0.5" width="273" height="48"></rect>
+                <text id="Exit-Procenv" font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                    <tspan x="49" y="33">Exit Procenv</tspan>
+                </text>
+            </g>
+            <path d="M161,646 L161,863.5" id="Run-Application-and-main-checks-loop-→-Application-exit" stroke="#494F57" fill="#494F57" stroke-linecap="square"></path>
+            <path id="Run-Application-and-main-checks-loop-→-Application-exit-decoration-1" d="M161,863.5 L164,852.7 L158,852.7 L161,863.5 Z" stroke="#494F57" fill="#494F57" stroke-linecap="square"></path>
+            <g id="Run-Application-and-main-checks-loop" transform="translate(24.000000, 542.000000)">
+                <g id="Run-main-checks-loop" transform="translate(320.000000, 54.000000)">
+                    <rect id="Rectangle-4" stroke="#494F57" x="0.5" y="0.5" width="253" height="97" rx="8"></rect>
+                    <text font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                        <tspan x="19.5" y="43">Run main checks </tspan>
+                        <tspan x="98.7" y="74">loop</tspan>
+                    </text>
+                </g>
+                <g id="Run-Application" transform="translate(21.000000, 55.000000)">
+                    <rect id="Rectangle-4" stroke="#494F57" x="0.5" y="0.5" width="253" height="48" rx="8"></rect>
+                    <text font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                        <tspan x="19" y="33">Run Application</tspan>
+                    </text>
+                </g>
+                <rect id="Rectangle-5" stroke="#494F57" x="0.5" y="33.5" width="598" height="137" rx="8"></rect>
+                <text id="In-parallel" font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                    <tspan x="21" y="24">In parallel </tspan>
+                </text>
+            </g>
+            <path d="M321,509 L321,575" id="Preboot-Status-→-Run-Application-and-main-checks-loop" stroke="#494F57" fill="#494F57" stroke-linecap="square"></path>
+            <path id="Preboot-Status-→-Run-Application-and-main-checks-loop-decoration-1" d="M321,575 L324,564.2 L318,564.2 L321,575 Z" stroke="#494F57" fill="#494F57" stroke-linecap="square"></path>
+            <text id="Yes" font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                <tspan x="330" y="550">Yes</tspan>
+            </text>
+            <g id="Preboot-Status" transform="translate(202.000000, 271.000000)">
+                <rect id="Rectangle-3" stroke="#494F57" transform="translate(119.000000, 119.000000) rotate(-45.000000) translate(-119.000000, -119.000000) " x="35.5" y="35.5" width="167" height="167"></rect>
+                <text id="All-preboot-checks-p" font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                    <tspan x="99.4" y="71">All</tspan>
+                    <tspan x="70.6" y="102">preboot </tspan>
+                    <tspan x="77.8" y="133">checks</tspan>
+                    <tspan x="77.8" y="164">passed</tspan>
+                </text>
+            </g>
+            <path d="M321,199 L321,271" id="Preboot→Preboot-Status" stroke="#494F57" fill="#494F57" stroke-linecap="square"></path>
+            <path id="Preboot→Preboot-Status-decoration-1" d="M321,271 L324,260.2 L318,260.2 L321,271 Z" stroke="#494F57" fill="#494F57" stroke-linecap="square"></path>
+            <g id="Preboot" transform="translate(162.000000, 150.000000)">
+                <rect id="Rectangle-2" stroke="#494F57" x="0.5" y="0.5" width="319" height="48" rx="8"></rect>
+                <text id="Run-preboot-checks" font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                    <tspan x="29" y="32">Run preboot checks</tspan>
+                </text>
+            </g>
+            <path d="M320,77 L320,149" id="Start→Preboot" stroke="#494F57" fill="#494F57" stroke-linecap="square"></path>
+            <path id="Start→Preboot-decoration-1" d="M320,149 L323,138.2 L317,138.2 L320,149 Z" stroke="#494F57" fill="#494F57" stroke-linecap="square"></path>
+            <g id="Start" transform="translate(161.000000, 23.000000)">
+                <rect id="Rectangle" stroke="#494F57" x="0.5" y="0.5" width="319" height="52"></rect>
+                <text id="Start-Procenv" font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                    <tspan x="66" y="35">Start Procenv</tspan>
+                </text>
+            </g>
+            <path d="M439,390 L623,390" id="Line" stroke="#494F57" fill="#494F57" stroke-linecap="square"></path>
+            <path id="Line-decoration-1" d="M623,390 L612.2,387 L612.2,393 L623,390 Z" stroke="#494F57" fill="#494F57" stroke-linecap="square"></path>
+            <g id="Application-exit" transform="translate(623.000000, 366.000000)">
+                <rect id="Rectangle" stroke="#494F57" x="0.5" y="0.5" width="273" height="48"></rect>
+                <text id="Exit-Procenv" font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                    <tspan x="49" y="33">Exit Procenv</tspan>
+                </text>
+            </g>
+            <text id="No" font-family="SourceCodePro-Semibold, Source Code Pro" font-size="24" font-weight="500" fill="#494F57">
+                <tspan x="516" y="378">No</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
