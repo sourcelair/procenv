@@ -10,7 +10,7 @@ Procenv maintains a lifecycle, in order to keep up with the status of the Applic
 
 ## Control Flow Diagram
 
-If you are more of a visual person, you can see a control flow diagram approach to the Lifecycle.
+If you are more of a visual person, you can see a control flow diagram approach to the Procenv lifecycle.
 
 ![The Procenv Lifecycle Control Flow Diagram](./img/procenv-lifecycle.svg)
 
