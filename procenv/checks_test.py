@@ -277,7 +277,10 @@ class PortBindCheckTest(unittest.TestCase):
                 return_value=True,
             ):
                 check.main()
-                assert log_mock.called is False
+                log_mock.assert_called_once_with(
+                    'PB20',
+                    'Application bound successfully to port "31415"',
+                )
 
 
 def test_load_check():

@@ -24,7 +24,7 @@ DEFAULT_CHECKS = [
 )
 def main(check):
     """
-    Procenv lets you run, monitor and manage Procfile-based applications.
+    Procenv lets you run, manage and monitor Procfile-based applications.
     """
     utils.log('PE00', '👋 Welcome to Procenv')
     checks = [load_check(path) for path in check]

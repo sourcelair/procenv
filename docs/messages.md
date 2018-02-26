@@ -18,7 +18,7 @@ The `{code}` of every Procenv message has the following format: `{component}{sta
     - `4X`: User error (e.g. applicaiton has not bound to port)
     - `5X`: Internal procenv error
 
-Procenv status codes intentionally keep a resemblance to [HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#1xx_Informational_responses) (e.g. 1xx is for informational responses, 2xx is for success responses etc.)
+Procenv status codes intentionally keep a resemblance to [HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#1xx_Informational_responses) (e.g. 1xx is for informational responses, 2xx is for success responses etc.) and [Heroku Error Codes](https://devcenter.heroku.com/articles/error-codes) (component code, error code) at the same time.
 
 Below you can find documentation for all available Procenv messages.
 

@@ -122,6 +122,9 @@ class PortBindCheck(BaseCheck):
         if not self.port_is_being_used():
             message = f'Application has not bound to port "{self.port}"'
             utils.log('PB40', message)
+        else:
+            message = f'Application bound successfully to port "{self.port}"'
+            utils.log('PB20', message)
 
 
 def load_check(dotted_path):
