@@ -1,5 +1,7 @@
 # Procenv: Run, manage and monitor Procfile-based applications
 
+[![Build Status](https://travis-ci.org/sourcelair/procenv.svg?branch=master)](https://travis-ci.org/sourcelair/procenv)
+
 Procenv is a command line program that:
 
 1. Runs your application's processes based on a Procfile

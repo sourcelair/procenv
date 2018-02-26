@@ -1,0 +1,18 @@
+language: python
+
+python:
+    - 3.6
+
+install:
+    - pip install pipenv==9.0.1
+    - pipenv install --system --dev
+
+env:
+  matrix:
+    - TEST_SCRIPT=lint
+    - TEST_SCRIPT=test
+
+script: ./bin/$TEST_SCRIPT
+
+notifications:
+    email: false
