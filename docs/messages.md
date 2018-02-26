@@ -10,7 +10,12 @@ All Procenv messages have the following format `[Procenv Message] ({code}) {mess
 
 The `{code}` of every Procenv message has the following format: `{component}{status}`. In this format:
 
-- `{component}` is a 2-uppercase-latin-character code of the corresponding Procenv component (e.g. `PB` for the `PortBindCheck` component)
+- `{component}` is a 2-uppercase-latin-character code of the corresponding Procenv component:
+    - `PE`: Procenv
+    - `PF`: ProcfileCheck
+    - `DB`: DatabaseURLCheck
+    - `RD`: RedisURLCheck
+    - `PB`: PortBindCheck
 - `{status}` is a 2-digit number representing the status of the component in the following format:
     - `0X`: Message that should always appear (e.g. the welcome message)
     - `1X`: Informational message (e.g. the connection details of the database)
@@ -22,11 +27,7 @@ Procenv status codes intentionally keep a resemblance to [HTTP status codes](htt
 
 Below you can find documentation for all available Procenv messages.
 
-## (PE) Procenv
-
-...
-
-### PE00: Welcome
+## PE00 - Welcome
 
 ...
 
@@ -34,7 +35,7 @@ Below you can find documentation for all available Procenv messages.
 [Procenv Message] (PE00) 👋 Welcome to Procenv
 ```
 
-### PE01: Running preboot checks
+## PE01 - Running preboot checks
 
 ...
 
@@ -42,7 +43,7 @@ Below you can find documentation for all available Procenv messages.
 [Procenv Message] (PE01) Running pre-boot checks for your application
 ```
 
-### PE10: Running application with Procfile
+## PE10 - Running application with Procfile
 
 ...
 
@@ -50,7 +51,7 @@ Below you can find documentation for all available Procenv messages.
 [Procenv Message] (PE10) Running application with Procfile "{self.procfile}"
 ```
 
-### PE11: Exiting because at least one preboot check failed
+## PE11 - Exiting because at least one preboot check failed
 
 ...
 
@@ -58,9 +59,7 @@ Below you can find documentation for all available Procenv messages.
 [Procenv Message] (PE11) Exiting because at least one preboot check failed
 ```
 
-## (PF) Procfile
-
-### PF10: Falling back to Procfile
+## PF10 - Falling back to Procfile
 
 ...
 
@@ -68,7 +67,7 @@ Below you can find documentation for all available Procenv messages.
 [Procenv Message] (PF10) Cannot find the Procfile "{env_var_procfile}" defined in the PROCFILE environment variable. Falling back to "Procfile".
 ```
 
-### PF40: Cannot find a Procfile to run your application
+## PF40 - Cannot find a Procfile to run your application
 
 ...
 
@@ -76,9 +75,7 @@ Below you can find documentation for all available Procenv messages.
 [Procenv Message] (PF40) ...
 ```
 
-## (DB) Database Connection
-
-### DB10: Database connection details
+## DB10 - Database connection details
 
 ...
 
@@ -86,9 +83,7 @@ Below you can find documentation for all available Procenv messages.
 [Procenv Message] (DB10) Your application is expected to connect to its database at "{DATABASE_URL}"
 ```
 
-## (RD) Redis Connection
-
-### RD10: Redis connection details
+## RD10 - Redis connection details
 
 ...
 
@@ -96,9 +91,7 @@ Below you can find documentation for all available Procenv messages.
 [Procenv Message] (RD10) Your application is expected to connect to Redis at "{REDIS_URL}"
 ```
 
-## (PB) Port Binding
-
-### PB10: Announce port to bind
+## PB10 - Announce port to bind
 
 ...
 
@@ -106,7 +99,15 @@ Below you can find documentation for all available Procenv messages.
 [Procenv Message] (PB10) Application is expected to bind to port "{PORT}"
 ```
 
-### PB40: Application not bound to port
+## PB40 - Application bound to port successfully
+
+...
+
+```
+[Procenv Message] (PB20) Application bound successfully to port "{PORT}"
+```
+
+## PB40 - Application not bound to port
 
 ...
 

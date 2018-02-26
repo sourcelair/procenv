@@ -46,7 +46,7 @@ Procenv is a superset of these tools. Actually, Procenv relies on Honcho to run 
 
 ## License
 
-Procenv is licensed under the [MIT License](LICENSE)
+Procenv is licensed under the [MIT License](LICENSE).
 
 ---
 

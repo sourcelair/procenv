@@ -23,7 +23,7 @@ Options:
 
 ### check
 
-The `--check` (or `-c`) command line argument is being used to determine, which Procenv checks should run for the application.
+The `--check` (or `-c`) command line argument is being used to determine which Procenv checks should run for the application.
 
 Each check should be defined as a Python dotted path to the corresponding check class. This means that you can also define and run your own custom checks too 🙌!
 
