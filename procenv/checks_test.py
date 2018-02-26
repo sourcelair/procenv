@@ -56,7 +56,6 @@ class BaseCheckTest(unittest.TestCase):
         expected_main_call_args_list = [mock.call(), mock.call()]
         assert legit_check.main.call_args_list == expected_main_call_args_list
 
-
     def test_main_loop_no_should_main_check_run(self):
         """
         Ensure that when a subclass of `BaseCheck` does not implement the
