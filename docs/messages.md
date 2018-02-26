@@ -29,23 +29,23 @@ Below you can find documentation for all available Procenv messages.
 
 ## PE00 - Welcome
 
-...
+Welcome message when Procenv loads -- this should be the first message to be printed when Procenv loads.
 
 ```
 [Procenv Message] (PE00) 👋 Welcome to Procenv
 ```
 
-## PE01 - Running preboot checks
+## PE01 - Preboot checks running
 
-...
+Printed when the preboot checks of the applications start to run.
 
 ```
-[Procenv Message] (PE01) Running pre-boot checks for your application
+[Procenv Message] (PE01) Running preboot checks for your application
 ```
 
 ## PE10 - Running application with Procfile
 
-...
+Printed when the Procfile to run the application is being detected successfully.
 
 ```
 [Procenv Message] (PE10) Running application with Procfile "{self.procfile}"
@@ -53,7 +53,7 @@ Below you can find documentation for all available Procenv messages.
 
 ## PE11 - Exiting because at least one preboot check failed
 
-...
+At least one preboot check failed, so the application cannot run and Procenv exits.
 
 ```
 [Procenv Message] (PE11) Exiting because at least one preboot check failed
@@ -61,7 +61,7 @@ Below you can find documentation for all available Procenv messages.
 
 ## PF10 - Falling back to Procfile
 
-...
+ProcfileCheck could not find the Procfile defined in the `PROCFILE` environment variable and falls back to the default Procfile name; `Procfile`.
 
 ```
 [Procenv Message] (PF10) Cannot find the Procfile "{env_var_procfile}" defined in the PROCFILE environment variable. Falling back to "Procfile".
@@ -69,15 +69,15 @@ Below you can find documentation for all available Procenv messages.
 
 ## PF40 - Cannot find a Procfile to run your application
 
-...
+ProcfileCheck could not locate a valid Procfile to run the application.
 
 ```
-[Procenv Message] (PF40) ...
+[Procenv Message] (PF40) Cannot find a Procfile to run your application
 ```
 
 ## DB10 - Database connection details
 
-...
+Procenv detected a `DATABASE_URL` environment variable, so it prints a message to let the user know where is the application expected to find its database.
 
 ```
 [Procenv Message] (DB10) Your application is expected to connect to its database at "{DATABASE_URL}"
@@ -85,23 +85,23 @@ Below you can find documentation for all available Procenv messages.
 
 ## RD10 - Redis connection details
 
-...
+Procenv detected a `REDIS_URL` environment variable, so it prints a message to let the user know where is the application expected to find Redis.
 
 ```
 [Procenv Message] (RD10) Your application is expected to connect to Redis at "{REDIS_URL}"
 ```
 
-## PB10 - Announce port to bind
+## PB10 - Port to bind
 
-...
+Procenv detected lets the user know to which port is the application expected to bind, according to the `PORT` environment variable.
 
 ```
 [Procenv Message] (PB10) Application is expected to bind to port "{PORT}"
 ```
 
-## PB40 - Application bound to port successfully
+## PB20 - Application bound to port successfully
 
-...
+Application successfully bound to the port declared in the `PORT` environment variable.
 
 ```
 [Procenv Message] (PB20) Application bound successfully to port "{PORT}"
@@ -109,7 +109,7 @@ Below you can find documentation for all available Procenv messages.
 
 ## PB40 - Application not bound to port
 
-...
+The port declared in the `PORT` environment variable is available, so it's assumed that the application has not bound to it yet.
 
 ```
 [Procenv Message] (PB40) Application has not bound to port "{PORT}"

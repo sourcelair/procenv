@@ -34,7 +34,7 @@ class ProcfileApplication:
         return _checks
 
     def run_preboot_checks(self):
-        utils.log('PE01', 'Running pre-boot checks for your application')
+        utils.log('PE01', 'Running preboot checks for your application')
         at_least_one_check_has_failed = False
 
         for check in self.preboot_checks:

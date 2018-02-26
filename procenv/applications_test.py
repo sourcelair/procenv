@@ -120,7 +120,7 @@ class ProcfileApplicationTest(unittest.TestCase):
         expected_log_mock_call_args_list = [
             mock.call(
                 'PE01',
-                'Running pre-boot checks for your application',
+                'Running preboot checks for your application',
             ),
         ]
 
@@ -153,7 +153,7 @@ class ProcfileApplicationTest(unittest.TestCase):
         expected_log_mock_call_args_list = [
             mock.call(
                 'PE01',
-                'Running pre-boot checks for your application',
+                'Running preboot checks for your application',
             ),
             mock.call(
                 'FB40',

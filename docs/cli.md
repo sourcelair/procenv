@@ -38,7 +38,7 @@ procenv --check procenv.checks.ProcfileCheck --check procenv.checks.PortBindChec
 ```
 $ procenv
 [Procenv Message] (PE00) 👋 Welcome to Procenv
-[Procenv Message] (PE01) Running pre-boot checks for your application
+[Procenv Message] (PE01) Running preboot checks for your application
 [Procenv Message] (PB10) Application is expected to bind to port "8000"
 [Procenv Message] (PE10) Running application with Procfile "Procfile.legit"
 13:04:24 system | web.1 started (pid=39)
