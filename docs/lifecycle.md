@@ -2,7 +2,7 @@
 
 Procenv maintains a lifecycle, in order to keep up with the status of the Application, inform the user and handle situations gracefully. This lifecycle can be described in 5 steps:
 
-1. Procenv start
+1. Start Procenv
 2. Run all preboot checks
 3. If not all preboot checks succeed, then exit Procenv
 4. If all preboot checks succeed, then run the Application and the main checks loop in parallel
