@@ -8,4 +8,4 @@ Below you can find links of detailed documentaion for Procenv's Command Line Int
 - [Procfiles](procfiles.md)
 - [Lifecycle](lifecycle.md)
 - [Messages](messages.md)
-- Checks
+- [Checks](checks.md)
